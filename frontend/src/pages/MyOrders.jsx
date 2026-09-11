@@ -8,7 +8,7 @@ const MyOrders = () => {
   const getOrders = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/orders",
+        "https://e-commerce-app-v9zz.onrender.com/api/orders",
         {
           headers: {
             Authorization: token

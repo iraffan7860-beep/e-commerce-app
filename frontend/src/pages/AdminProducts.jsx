@@ -18,7 +18,7 @@ const AdminProducts = () => {
   const getProducts = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/products"
+        "https://e-commerce-app-v9zz.onrender.com/api/products"
       );
 
       const data = await response.json();
@@ -47,7 +47,7 @@ const AdminProducts = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/products",
+        "https://e-commerce-app-v9zz.onrender.com/api/products",
         {
           method: "POST",
           headers: {
@@ -103,7 +103,7 @@ const AdminProducts = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/products/${editId}`,
+        `https://e-commerce-app-v9zz.onrender.com/api/products/${editId}`,
         {
           method: "PUT",
           headers: {
@@ -142,7 +142,7 @@ const AdminProducts = () => {
   const deleteProduct = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/products/${id}`,
+        `https://e-commerce-app-v9zz.onrender.com/api/products/${id}`,
         {
           method: "DELETE",
           headers: {

@@ -8,7 +8,7 @@ const Cart = () => {
   const getCart = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/cart",
+        "https://e-commerce-app-v9zz.onrender.com/api/cart",
         {
           headers: {
             Authorization: token
@@ -37,7 +37,7 @@ const Cart = () => {
   const placeOrder = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/orders",
+        "https://e-commerce-app-v9zz.onrender.com/api/orders",
         {
           method: "POST",
           headers: {
@@ -66,7 +66,7 @@ const Cart = () => {
   const removeItem = async (productId) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/cart/${productId}`,
+        `https://e-commerce-app-v9zz.onrender.com/api/cart/${productId}`,
         {
           method: "DELETE",
           headers: {
@@ -92,7 +92,7 @@ const Cart = () => {
   const updateQuantity = async (id, quantity) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/cart/${id}`,
+        `https://e-commerce-app-v9zz.onrender.com/api/cart/${id}`,
         {
           method: "PUT",
           headers: {

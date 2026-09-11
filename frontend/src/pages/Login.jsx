@@ -12,7 +12,7 @@ const Login = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/login",
+        "https://e-commerce-app-v9zz.onrender.com/api/auth/login",
         {
           method: "POST",
           headers: {
@@ -83,6 +83,12 @@ const Login = () => {
             Login
           </button>
         </form>
+
+        <p className="forgot-link">
+          <Link to="/forgot-password">
+            Forgot Password?
+          </Link>
+        </p>
 
         <p className="form-footer">
           Don't have an account?{" "}

@@ -1573,3 +1573,19 @@ a {
   text-decoration: none;
   font-weight: bold;
 }
+
+.forgot-link {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.forgot-link a {
+  color: #c43d70;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.forgot-link a:hover {
+  text-decoration: underline;
+}

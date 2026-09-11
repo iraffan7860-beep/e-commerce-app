@@ -11,7 +11,7 @@ const ProductDetails = () => {
     const getProduct = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/products/${id}`
+          `https://e-commerce-app-v9zz.onrender.com/api/products/${id}`
         );
 
         const data = await response.json();
@@ -41,7 +41,7 @@ const ProductDetails = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/cart",
+        "https://e-commerce-app-v9zz.onrender.com/api/cart",
         {
           method: "POST",
           headers: {
