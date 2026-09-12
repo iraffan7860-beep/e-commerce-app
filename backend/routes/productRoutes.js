@@ -6,7 +6,8 @@ import {
   getProducts,
   getProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  importProducts
 } from "../controllers/productController.js";
 
 import auth from "../middleware/auth.js";
@@ -18,6 +19,8 @@ router.get("/", getProducts);
 
 // Get one product
 router.get("/:id", getProduct);
+
+router.post("/import-api", auth, adminOnly, importProducts);
 
 router.post("/", auth, adminOnly, createProduct);
 router.put("/:id", auth, adminOnly, updateProduct);

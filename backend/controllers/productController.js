@@ -136,3 +136,36 @@ export const deleteProduct = async (req, res) => {
     });
   }
 };
+
+// Import Products from API
+export const importProducts = async (req, res) => {
+  try {
+    const response = await fetch(
+      "https://dummyjson.com/products"
+    );
+
+    const data = await response.json();
+
+    const products = data.products.map((item) => ({
+      name: item.title,
+      price: item.price,
+      category: item.category,
+      image: item.images[0],
+      description: item.description
+    }));
+
+    await Product.insertMany(products);
+
+    res.json({
+      message: "Products imported successfully",
+      count: products.length
+    });
+
+  } catch (error) {
+    console.log("Import products error:", error.message);
+
+    res.status(500).json({
+      message: "Failed to import products"
+    });
+  }
+};

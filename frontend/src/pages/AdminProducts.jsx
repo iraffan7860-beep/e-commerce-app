@@ -42,6 +42,35 @@ const AdminProducts = () => {
     });
   };
 
+  // Import Products from API
+  const importProducts = async () => {
+    try {
+      const response = await fetch(
+        "https://e-commerce-app-v9zz.onrender.com/api/products/import-api",
+        {
+          method: "POST",
+          headers: {
+            Authorization: token
+          }
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message);
+        return;
+      }
+
+      alert(`${data.count} products imported successfully`);
+
+      getProducts();
+    } catch (error) {
+      console.log(error);
+      alert("Failed to import products");
+    }
+  };
+
   const addProduct = async (e) => {
     e.preventDefault();
 
@@ -182,6 +211,14 @@ const AdminProducts = () => {
     <div className="admin-page">
       <h1>Admin Products</h1>
 
+      {/* Import Products */}
+      <button
+        onClick={importProducts}
+        className="main-button"
+      >
+        Import Products from API
+      </button>
+
       <form
         onSubmit={editId ? updateProduct : addProduct}
         className="admin-form"
@@ -254,21 +291,21 @@ const AdminProducts = () => {
 
             <p>Price: ₹{product.price}</p>
 
-             <div className="admin-buttons">
-  <button
-    onClick={() => editProduct(product)}
-    className="edit-button"
-  >
-    Edit
-  </button>
+            <div className="admin-buttons">
+              <button
+                onClick={() => editProduct(product)}
+                className="edit-button"
+              >
+                Edit
+              </button>
 
-  <button
-    onClick={() => deleteProduct(product._id)}
-    className="remove-button"
-  >
-    Delete
-  </button>
-</div>
+              <button
+                onClick={() => deleteProduct(product._id)}
+                className="remove-button"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>
