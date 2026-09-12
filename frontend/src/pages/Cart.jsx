@@ -1,20 +1,12 @@
 import { useEffect, useState } from "react";
+import apiFetch from "../api";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
 
-  const token = localStorage.getItem("token");
-
   const getCart = async () => {
     try {
-      const response = await fetch(
-        "https://e-commerce-app-v9zz.onrender.com/api/cart",
-        {
-          headers: {
-            Authorization: token
-          }
-        }
-      );
+      const response = await apiFetch("/api/cart");
 
       const data = await response.json();
 
@@ -36,15 +28,9 @@ const Cart = () => {
   // Place order
   const placeOrder = async () => {
     try {
-      const response = await fetch(
-        "https://e-commerce-app-v9zz.onrender.com/api/orders",
-        {
-          method: "POST",
-          headers: {
-            Authorization: token
-          }
-        }
-      );
+      const response = await apiFetch("/api/orders", {
+        method: "POST"
+      });
 
       const data = await response.json();
 
@@ -65,13 +51,10 @@ const Cart = () => {
   // Remove item
   const removeItem = async (productId) => {
     try {
-      const response = await fetch(
-        `https://e-commerce-app-v9zz.onrender.com/api/cart/${productId}`,
+      const response = await apiFetch(
+        `/api/cart/${productId}`,
         {
-          method: "DELETE",
-          headers: {
-            Authorization: token
-          }
+          method: "DELETE"
         }
       );
 
@@ -91,13 +74,12 @@ const Cart = () => {
   // Update quantity
   const updateQuantity = async (id, quantity) => {
     try {
-      const response = await fetch(
-        `https://e-commerce-app-v9zz.onrender.com/api/cart/${id}`,
+      const response = await apiFetch(
+        `/api/cart/${id}`,
         {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json",
-            Authorization: token
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
             quantity: Number(quantity)

@@ -10,7 +10,7 @@ const Home = () => {
 
   const getProducts = async () => {
     try {
-      let url = " https://e-commerce-app-v9zz.onrender.com/api/products";
+      let url = "https://e-commerce-app-v9zz.onrender.com/api/products";
 
       const params = new URLSearchParams();
 

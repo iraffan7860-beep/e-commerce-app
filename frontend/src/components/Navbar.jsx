@@ -5,12 +5,12 @@ const Navbar = () => {
 
   const token = localStorage.getItem("token");
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+   const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
 
-    navigate("/login");
-  };
+  navigate("/login");
+};
 
   return (
     <nav className="navbar">

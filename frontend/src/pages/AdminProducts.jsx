@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import apiFetch from "../api";
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -13,13 +14,9 @@ const AdminProducts = () => {
 
   const [editId, setEditId] = useState(null);
 
-  const token = localStorage.getItem("token");
-
   const getProducts = async () => {
     try {
-      const response = await fetch(
-        "https://e-commerce-app-v9zz.onrender.com/api/products"
-      );
+      const response = await apiFetch("/api/products");
 
       const data = await response.json();
 
@@ -45,13 +42,10 @@ const AdminProducts = () => {
   // Import Products from API
   const importProducts = async () => {
     try {
-      const response = await fetch(
-        "https://e-commerce-app-v9zz.onrender.com/api/products/import-api",
+      const response = await apiFetch(
+        "/api/products/import-api",
         {
-          method: "POST",
-          headers: {
-            Authorization: token
-          }
+          method: "POST"
         }
       );
 
@@ -62,7 +56,9 @@ const AdminProducts = () => {
         return;
       }
 
-      alert(`${data.count} products imported successfully`);
+      alert(
+        `${data.count} products imported successfully`
+      );
 
       getProducts();
     } catch (error) {
@@ -75,13 +71,12 @@ const AdminProducts = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        "https://e-commerce-app-v9zz.onrender.com/api/products",
+      const response = await apiFetch(
+        "/api/products",
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
-            Authorization: token
+            "Content-Type": "application/json"
           },
           body: JSON.stringify(form)
         }
@@ -131,13 +126,12 @@ const AdminProducts = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        `https://e-commerce-app-v9zz.onrender.com/api/products/${editId}`,
+      const response = await apiFetch(
+        `/api/products/${editId}`,
         {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json",
-            Authorization: token
+            "Content-Type": "application/json"
           },
           body: JSON.stringify(form)
         }
@@ -170,13 +164,10 @@ const AdminProducts = () => {
 
   const deleteProduct = async (id) => {
     try {
-      const response = await fetch(
-        `https://e-commerce-app-v9zz.onrender.com/api/products/${id}`,
+      const response = await apiFetch(
+        `/api/products/${id}`,
         {
-          method: "DELETE",
-          headers: {
-            Authorization: token
-          }
+          method: "DELETE"
         }
       );
 
@@ -211,7 +202,6 @@ const AdminProducts = () => {
     <div className="admin-page">
       <h1>Admin Products</h1>
 
-      {/* Import Products */}
       <button
         onClick={importProducts}
         className="main-button"
@@ -262,7 +252,10 @@ const AdminProducts = () => {
           onChange={handleChange}
         />
 
-        <button type="submit" className="main-button">
+        <button
+          type="submit"
+          className="main-button"
+        >
           {editId ? "Update Product" : "Add Product"}
         </button>
 
@@ -287,9 +280,13 @@ const AdminProducts = () => {
           >
             <h3>{product.name}</h3>
 
-            <p>Category: {product.category}</p>
+            <p>
+              Category: {product.category}
+            </p>
 
-            <p>Price: ₹{product.price}</p>
+            <p>
+              Price: ₹{product.price}
+            </p>
 
             <div className="admin-buttons">
               <button
@@ -300,7 +297,9 @@ const AdminProducts = () => {
               </button>
 
               <button
-                onClick={() => deleteProduct(product._id)}
+                onClick={() =>
+                  deleteProduct(product._id)
+                }
                 className="remove-button"
               >
                 Delete

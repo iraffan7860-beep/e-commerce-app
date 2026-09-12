@@ -18,6 +18,7 @@ const Login = () => {
           headers: {
             "Content-Type": "application/json"
           },
+          credentials: "include", 
           body: JSON.stringify({
             email,
             password
@@ -32,7 +33,10 @@ const Login = () => {
         return;
       }
 
-      localStorage.setItem("token", data.token);
+      // Save Access Token
+      localStorage.setItem("token", data.accessToken);
+
+      // Save User
       localStorage.setItem("user", JSON.stringify(data.user));
 
       alert("Login successful");

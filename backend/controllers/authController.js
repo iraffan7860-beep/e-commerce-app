@@ -35,8 +35,6 @@ export const signup = async (req, res) => {
       }
     });
   } catch (error) {
-    console.log("Signup error:", error.message);
-
     res.status(500).json({
       message: "Signup failed"
     });
@@ -47,12 +45,6 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({
-        message: "Email and password are required"
-      });
-    }
 
     const user = await User.findOne({ email });
 
@@ -70,15 +62,28 @@ export const login = async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
       { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      process.env.ACCESS_KEY,
+      { expiresIn: "15m" }
     );
+
+    const refreshToken = jwt.sign(
+      { id: user._id },
+      process.env.REFRESH_KEY,
+      { expiresIn: "7d" }
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
 
     res.json({
       message: "Login successful",
-      token,
+      accessToken,
       user: {
         id: user._id,
         name: user.name,
@@ -87,10 +92,40 @@ export const login = async (req, res) => {
       }
     });
   } catch (error) {
-    console.log("Login error:", error.message);
-
     res.status(500).json({
       message: "Login failed"
+    });
+  }
+};
+
+// Refresh Access Token
+export const refreshToken = async (req, res) => {
+  try {
+    const token = req.cookies.refreshToken;
+
+    if (!token) {
+      return res.status(401).json({
+        message: "Refresh token required"
+      });
+    }
+
+    const decoded = jwt.verify(
+      token,
+      process.env.REFRESH_KEY
+    );
+
+    const accessToken = jwt.sign(
+      { id: decoded.id },
+      process.env.ACCESS_KEY,
+      { expiresIn: "15m" }
+    );
+
+    res.json({
+      accessToken
+    });
+  } catch (error) {
+    res.status(401).json({
+      message: "Invalid or expired refresh token"
     });
   }
 };
@@ -112,12 +147,6 @@ export const forgotPassword = async (req, res) => {
   try {
     const { email, newPassword } = req.body;
 
-    if (!email || !newPassword) {
-      return res.status(400).json({
-        message: "Email and new password are required"
-      });
-    }
-
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -127,16 +156,12 @@ export const forgotPassword = async (req, res) => {
     }
 
     user.password = newPassword;
-
     await user.save();
 
     res.json({
       message: "Password changed successfully"
     });
-
   } catch (error) {
-    console.log("Forgot password error:", error);
-
     res.status(500).json({
       message: "Failed to change password"
     });

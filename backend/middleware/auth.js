@@ -11,7 +11,10 @@ const auth = async (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(
+      token,
+      process.env.ACCESS_KEY
+    );
 
     const user = await User.findById(decoded.id);
 
@@ -26,7 +29,7 @@ const auth = async (req, res, next) => {
     next();
   } catch (error) {
     return res.status(401).json({
-      message: "Invalid or expired token"
+      message: "Invalid or expired access token"
     });
   }
 };

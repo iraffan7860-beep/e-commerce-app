@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import apiFetch from "../api";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -10,9 +11,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const response = await fetch(
-          `https://e-commerce-app-v9zz.onrender.com/api/products/${id}`
-        );
+        const response = await apiFetch(`/api/products/${id}`);
 
         const data = await response.json();
 
@@ -40,19 +39,15 @@ const ProductDetails = () => {
     }
 
     try {
-      const response = await fetch(
-        "https://e-commerce-app-v9zz.onrender.com/api/cart",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token
-          },
-          body: JSON.stringify({
-            productId: product._id
-          })
-        }
-      );
+      const response = await apiFetch("/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          productId: product._id
+        })
+      });
 
       const data = await response.json();
 

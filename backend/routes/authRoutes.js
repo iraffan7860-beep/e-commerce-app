@@ -4,7 +4,8 @@ import {
   signup,
   login,
   getCurrentUser,
-  forgotPassword
+  forgotPassword,
+  refreshToken
 } from "../controllers/authController.js";
 
 import auth from "../middleware/auth.js";
@@ -16,6 +17,9 @@ router.post("/signup", signup);
 
 // Login
 router.post("/login", login);
+
+// Refresh Token
+router.post("/refresh-token", refreshToken);
 
 // Forgot Password
 router.post("/forgot-password", forgotPassword);
