@@ -55,9 +55,10 @@ if (googleToken) {
   };
 
   const googleLogin = () => {
-    window.location.href =
-      "https://e-commerce-app-v9zz.onrender.com//api/auth/google";
-  };
+  window.location.href =
+    "https://e-commerce-app-v9zz.onrender.com/api/auth/google";
+};
+ 
 
   return (
     <div className="auth-container">
