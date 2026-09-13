@@ -24,7 +24,7 @@ if (googleToken) {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/login",
+        "https://e-commerce-app-v9zz.onrender.com//api/auth/login",
         {
           method: "POST",
           headers: {
@@ -56,7 +56,7 @@ if (googleToken) {
 
   const googleLogin = () => {
     window.location.href =
-      "http://localhost:5000/api/auth/google";
+      "https://e-commerce-app-v9zz.onrender.com//api/auth/google";
   };
 
   return (
