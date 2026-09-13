@@ -167,3 +167,40 @@ export const forgotPassword = async (req, res) => {
     });
   }
 };
+
+// Google Login
+export const googleLogin = async (req, res) => {
+  try {
+    const user = req.user;
+
+    const accessToken = jwt.sign(
+      { id: user._id },
+      process.env.ACCESS_KEY,
+      { expiresIn: "15m" }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: user._id },
+      process.env.REFRESH_KEY,
+      { expiresIn: "7d" }
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    res.redirect(
+      `http://localhost:5173/login#token=${accessToken}`
+    );
+
+  } catch (error) {
+    console.log("Google Login error:", error);
+
+    res.status(500).json({
+      message: "Google Login failed"
+    });
+  }
+};

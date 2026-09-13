@@ -4,16 +4,16 @@ import { Link } from "react-router-dom";
 const Products = () => {
   const [products, setProducts] = useState([]);
 
-   useEffect(() => {
-  fetch("https://e-commerce-app-v9zz.onrender.com/api/products")
-    .then((res) => res.json())
-    .then((data) => {
-      setProducts(data || []);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}, []);
+  useEffect(() => {
+    fetch("https://e-commerce-app-v9zz.onrender.com/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data || []);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="products-page">
@@ -23,28 +23,38 @@ const Products = () => {
       <div className="products-grid">
         {products.map((product) => (
           <div className="product-card" key={product._id}>
+
             <div className="product-image">
               {product.image ? (
                 <img src={product.image} alt={product.name} />
               ) : (
-                <span>🛍️</span>
+                <span className="no-image">🛍️</span>
               )}
             </div>
 
-            <h2>{product.name}</h2>
+            <div className="product-info">
+              <p className="category">{product.category}</p>
 
-            <p className="category">{product.category}</p>
+              <h3>{product.name}</h3>
 
-            <p>{product.description}</p>
+              <p className="description">
+                {product.description}
+              </p>
 
-            <h3>₹{product.price}</h3>
+              <div className="product-bottom">
+                <span className="price">
+                  ₹{product.price}
+                </span>
 
-            <Link
-              to={`/product/${product._id}`}
-              className="view-button"
-            >
-              View Details
-            </Link>
+                <Link
+                  to={`/product/${product._id}`}
+                  className="view-button"
+                >
+                  View Details
+                </Link>
+              </div>
+            </div>
+
           </div>
         ))}
       </div>

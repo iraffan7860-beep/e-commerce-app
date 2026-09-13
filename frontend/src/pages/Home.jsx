@@ -10,7 +10,8 @@ const Home = () => {
 
   const getProducts = async () => {
     try {
-      let url = "https://e-commerce-app-v9zz.onrender.com/api/products";
+      let url =
+        "https://e-commerce-app-v9zz.onrender.com/api/products";
 
       const params = new URLSearchParams();
 
@@ -46,15 +47,6 @@ const Home = () => {
 
       <section className="hero">
 
-        {/* Animated Background */}
-
-        <div className="hero-glow glow-one"></div>
-        <div className="hero-glow glow-two"></div>
-
-        <div className="sparkle sparkle-one">✦</div>
-        <div className="sparkle sparkle-two">✦</div>
-        <div className="sparkle sparkle-three">•</div>
-
         {/* Hero Content */}
 
         <div className="hero-content">
@@ -64,18 +56,19 @@ const Home = () => {
           </div>
 
           <p className="hero-small">
-            ✦ WELCOME TO MINISHOP
+            ✦ SHOP SMART. LIVE BETTER.
           </p>
 
           <h1>
-            Shop What
+            Everything You Need,
             <br />
-            <span>You Love.</span>
+            <span>All in One Place.</span>
           </h1>
 
           <p className="hero-text">
-            Discover amazing products, beautiful styles
-            and everything you need in one place.
+            Discover quality products at great prices.
+            Shop your favourites and enjoy a simple,
+            secure shopping experience.
           </p>
 
           <div className="hero-buttons">
@@ -108,72 +101,6 @@ const Home = () => {
 
           </div>
 
-        </div>
-
-        {/* Hero Visual */}
-
-        <div className="hero-visual">
-
-          <div className="hero-circle circle-one"></div>
-          <div className="hero-circle circle-two"></div>
-
-          {/* Free Delivery */}
-
-          <div className="floating-badge delivery-badge">
-            🚚
-            <div>
-              <strong>Free Delivery</strong>
-              <span>On selected orders</span>
-            </div>
-          </div>
-
-          {/* Discount */}
-
-          <div className="floating-badge discount-badge">
-            ✨
-            <div>
-              <strong>Special Offer</strong>
-              <span>Shop & Save</span>
-            </div>
-          </div>
-
-          {/* Main Card */}
-
-          <div className="shopping-card">
-
-            <div className="shopping-icon">
-              🛍️
-            </div>
-
-            <p>YOUR SHOPPING</p>
-
-            <h2>Made Easy</h2>
-
-            <div className="mini-line"></div>
-
-            <span>
-              Explore • Choose • Enjoy
-            </span>
-
-          </div>
-
-          {/* Small Product Cards */}
-
-          <div className="mini-product mini-one">
-            <span>👟</span>
-            <div>
-              <strong>Fashion</strong>
-              <small>Trending</small>
-            </div>
-          </div>
-
-          <div className="mini-product mini-two">
-            <span>🎧</span>
-            <div>
-              <strong>Electronics</strong>
-              <small>Popular</small>
-            </div>
-          </div>
 
         </div>
 
@@ -186,11 +113,13 @@ const Home = () => {
         <div className="section-heading">
 
           <div>
+
             <p className="small-title">
               OUR COLLECTION
             </p>
 
             <h2>Shop Now</h2>
+
           </div>
 
           <div className="filters">
@@ -206,12 +135,30 @@ const Home = () => {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option value="">All Categories</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Clothing">Clothing</option>
-              <option value="Shoes">Shoes</option>
-              <option value="Beauty">Beauty</option>
-              <option value="Home">Home</option>
+              <option value="">
+                All Categories
+              </option>
+
+              <option value="Electronics">
+                Electronics
+              </option>
+
+              <option value="Clothing">
+                Clothing
+              </option>
+
+              <option value="Shoes">
+                Shoes
+              </option>
+
+              <option value="Beauty">
+                Beauty
+              </option>
+
+              <option value="Home">
+                Home
+              </option>
+
             </select>
 
           </div>
@@ -221,8 +168,15 @@ const Home = () => {
         {products.length === 0 ? (
 
           <div className="empty-products">
-            <h3>No products found</h3>
-            <p>Try another search or category.</p>
+
+            <h3>
+              No products found
+            </h3>
+
+            <p>
+              Try another search or category.
+            </p>
+
           </div>
 
         ) : (
@@ -230,10 +184,12 @@ const Home = () => {
           <div className="product-grid">
 
             {products.map((product) => (
+
               <ProductCard
                 key={product._id}
                 product={product}
               />
+
             ))}
 
           </div>

@@ -3,6 +3,7 @@ import apiFetch from "../api";
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
+  const [contactMessages, setContactMessages] = useState([]);
 
   const [form, setForm] = useState({
     name: "",
@@ -17,7 +18,6 @@ const AdminProducts = () => {
   const getProducts = async () => {
     try {
       const response = await apiFetch("/api/products");
-
       const data = await response.json();
 
       if (response.ok) {
@@ -28,8 +28,22 @@ const AdminProducts = () => {
     }
   };
 
+  const getContactMessages = async () => {
+    try {
+      const response = await apiFetch("/api/contact");
+      const data = await response.json();
+
+      if (response.ok) {
+        setContactMessages(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getProducts();
+    getContactMessages();
   }, []);
 
   const handleChange = (e) => {
@@ -39,7 +53,7 @@ const AdminProducts = () => {
     });
   };
 
-  // Import Products from API
+  // Import Products
   const importProducts = async () => {
     try {
       const response = await apiFetch(
@@ -56,9 +70,7 @@ const AdminProducts = () => {
         return;
       }
 
-      alert(
-        `${data.count} products imported successfully`
-      );
+      alert(`${data.count} products imported successfully`);
 
       getProducts();
     } catch (error) {
@@ -67,6 +79,7 @@ const AdminProducts = () => {
     }
   };
 
+  // Add Product
   const addProduct = async (e) => {
     e.preventDefault();
 
@@ -105,6 +118,7 @@ const AdminProducts = () => {
     }
   };
 
+  // Edit Product
   const editProduct = (product) => {
     setEditId(product._id);
 
@@ -122,6 +136,7 @@ const AdminProducts = () => {
     });
   };
 
+  // Update Product
   const updateProduct = async (e) => {
     e.preventDefault();
 
@@ -162,7 +177,14 @@ const AdminProducts = () => {
     }
   };
 
+  // Delete Product
   const deleteProduct = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this product?"
+    );
+
+    if (!confirmDelete) return;
+
     try {
       const response = await apiFetch(
         `/api/products/${id}`,
@@ -186,6 +208,7 @@ const AdminProducts = () => {
     }
   };
 
+  // Cancel Edit
   const cancelEdit = () => {
     setEditId(null);
 
@@ -200,114 +223,318 @@ const AdminProducts = () => {
 
   return (
     <div className="admin-page">
-      <h1>Admin Products</h1>
 
-      <button
-        onClick={importProducts}
-        className="main-button"
-      >
-        Import Products from API
-      </button>
+      {/* Header */}
+      <div className="admin-header">
 
-      <form
-        onSubmit={editId ? updateProduct : addProduct}
-        className="admin-form"
-      >
-        <input
-          type="text"
-          name="name"
-          placeholder="Product Name"
-          value={form.name}
-          onChange={handleChange}
-        />
+        <div>
+          <p className="admin-small-title">
+            ADMIN PANEL
+          </p>
 
-        <input
-          type="number"
-          name="price"
-          placeholder="Price"
-          value={form.price}
-          onChange={handleChange}
-        />
+          <h1>
+            Admin Dashboard
+          </h1>
 
-        <input
-          type="text"
-          name="category"
-          placeholder="Category"
-          value={form.category}
-          onChange={handleChange}
-        />
-
-        <input
-          type="text"
-          name="image"
-          placeholder="Image URL"
-          value={form.image}
-          onChange={handleChange}
-        />
-
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleChange}
-        />
+          <p>
+            Manage your store products from here.
+          </p>
+        </div>
 
         <button
-          type="submit"
+          onClick={importProducts}
           className="main-button"
         >
-          {editId ? "Update Product" : "Add Product"}
+          📥 Import Products
         </button>
 
-        {editId && (
-          <button
-            type="button"
-            onClick={cancelEdit}
-            className="back-button"
-          >
-            Cancel Edit
-          </button>
-        )}
-      </form>
-
-      <h2>All Products</h2>
-
-      <div className="admin-products">
-        {products.map((product) => (
-          <div
-            className="admin-product-card"
-            key={product._id}
-          >
-            <h3>{product.name}</h3>
-
-            <p>
-              Category: {product.category}
-            </p>
-
-            <p>
-              Price: ₹{product.price}
-            </p>
-
-            <div className="admin-buttons">
-              <button
-                onClick={() => editProduct(product)}
-                className="edit-button"
-              >
-                Edit
-              </button>
-
-              <button
-                onClick={() =>
-                  deleteProduct(product._id)
-                }
-                className="remove-button"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
       </div>
+
+      {/* Dashboard Cards */}
+      <div className="dashboard-cards">
+
+        <div className="dashboard-card">
+          <div className="dashboard-icon">
+            📦
+          </div>
+
+          <div>
+            <p>Total Products</p>
+            <h2>{products.length}</h2>
+          </div>
+        </div>
+
+        <div className="dashboard-card">
+          <div className="dashboard-icon">
+            ➕
+          </div>
+
+          <div>
+            <p>Add Product</p>
+            <h2>New</h2>
+          </div>
+        </div>
+
+        <div className="dashboard-card">
+          <div className="dashboard-icon">
+            ✏️
+          </div>
+
+          <div>
+            <p>Manage</p>
+            <h2>Edit</h2>
+          </div>
+        </div>
+
+        <div className="dashboard-card">
+          <div className="dashboard-icon">
+            🛒
+          </div>
+
+          <div>
+            <p>Store</p>
+            <h2>Active</h2>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Add Product Form */}
+      <div className="admin-section">
+
+        <h2>
+          {editId
+            ? "✏️ Update Product"
+            : "➕ Add New Product"}
+        </h2>
+
+        <form
+          onSubmit={
+            editId
+              ? updateProduct
+              : addProduct
+          }
+          className="admin-form"
+        >
+
+          <input
+            type="text"
+            name="name"
+            placeholder="Product Name"
+            value={form.name}
+            onChange={handleChange}
+          />
+
+          <input
+            type="number"
+            name="price"
+            placeholder="Price"
+            value={form.price}
+            onChange={handleChange}
+          />
+
+          <input
+            type="text"
+            name="category"
+            placeholder="Category"
+            value={form.category}
+            onChange={handleChange}
+          />
+
+          <input
+            type="text"
+            name="image"
+            placeholder="Image URL"
+            value={form.image}
+            onChange={handleChange}
+          />
+
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={form.description}
+            onChange={handleChange}
+          />
+
+          <div className="form-buttons">
+
+            <button
+              type="submit"
+              className="main-button"
+            >
+              {editId
+                ? "Update Product"
+                : "Add Product"}
+            </button>
+
+            {editId && (
+              <button
+                type="button"
+                onClick={cancelEdit}
+                className="back-button"
+              >
+                Cancel Edit
+              </button>
+            )}
+
+          </div>
+
+        </form>
+
+      </div>
+
+      {/* Products Section */}
+      <div className="admin-section">
+
+        <div className="products-heading">
+
+          <div>
+            <h2>📋 All Products</h2>
+
+            <p>
+              {products.length} products available
+            </p>
+          </div>
+
+        </div>
+
+        <div className="admin-products">
+
+          {products.map((product) => (
+
+            <div
+              className="admin-product-card"
+              key={product._id}
+            >
+
+              {product.image && (
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="admin-product-image"
+                />
+              )}
+
+              <div className="product-info">
+
+                <h3>
+                  {product.name}
+                </h3>
+
+                <p>
+                  <strong>
+                    Category:
+                  </strong>{" "}
+                  {product.category}
+                </p>
+
+                <p className="product-price">
+                  ₹{product.price}
+                </p>
+
+                <p className="product-description">
+                  {product.description}
+                </p>
+
+              </div>
+
+              <div className="admin-buttons">
+
+                <button
+                  onClick={() =>
+                    editProduct(product)
+                  }
+                  className="edit-button"
+                >
+                  ✏️ Edit
+                </button>
+
+                <button
+                  onClick={() =>
+                    deleteProduct(product._id)
+                  }
+                  className="remove-button"
+                >
+                  🗑️ Delete
+                </button>
+
+              </div>
+
+            </div>
+
+          ))}
+
+        </div>
+
+      </div>
+
+      {/* Contact Messages */}
+      <div className="admin-section">
+
+        <div className="products-heading">
+
+          <div>
+            <h2>📩 Contact Messages</h2>
+
+            <p>
+              {contactMessages.length} messages received
+            </p>
+          </div>
+
+        </div>
+
+        {contactMessages.length === 0 ? (
+
+          <p>
+            No contact messages yet.
+          </p>
+
+        ) : (
+
+          <div className="admin-products">
+
+            {contactMessages.map((contact) => (
+
+              <div
+                className="admin-product-card"
+                key={contact._id}
+              >
+
+                <div className="product-info">
+
+                  <h3>
+                    {contact.name}
+                  </h3>
+
+                  <p>
+                    <strong>Email:</strong>{" "}
+                    {contact.email}
+                  </p>
+
+                  <p className="product-description">
+                    <strong>Message:</strong>{" "}
+                    {contact.message}
+                  </p>
+
+                  <p>
+                    <strong>Date:</strong>{" "}
+                    {new Date(
+                      contact.createdAt
+                    ).toLocaleString()}
+                  </p>
+
+                </div>
+
+              </div>
+
+            ))}
+
+          </div>
+
+        )}
+
+      </div>
+
     </div>
   );
 };

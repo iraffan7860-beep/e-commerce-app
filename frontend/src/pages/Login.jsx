@@ -1,24 +1,35 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const googleToken = new URLSearchParams(
+  window.location.hash.substring(1)
+).get("token");
+
+if (googleToken) {
+  localStorage.setItem("token", googleToken);
+  window.history.replaceState(null, "", "/login");
+  navigate("/");
+  window.location.reload();
+}
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+
+  const login = async (e) => {
     e.preventDefault();
 
     try {
       const response = await fetch(
-        "https://e-commerce-app-v9zz.onrender.com/api/auth/login",
+        "http://localhost:5000/api/auth/login",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
-          credentials: "include", 
           body: JSON.stringify({
             email,
             password
@@ -29,75 +40,79 @@ const Login = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message);
+        setMessage(data.message);
         return;
       }
 
-      // Save Access Token
       localStorage.setItem("token", data.accessToken);
-
-      // Save User
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      alert("Login successful");
-
       navigate("/");
+      window.location.reload();
     } catch (error) {
-      alert("Something went wrong");
+      setMessage("Login failed");
     }
   };
 
+  const googleLogin = () => {
+    window.location.href =
+      "http://localhost:5000/api/auth/google";
+  };
+
   return (
-    <div className="form-page">
-      <div className="form-box">
-        <p className="small-title">WELCOME BACK</p>
+    <div className="auth-container">
+      <div className="auth-box">
 
         <h2>Login</h2>
 
-        <p className="form-subtitle">
-          Login to continue shopping.
-        </p>
+        <form onSubmit={login}>
 
-        <form onSubmit={handleLogin}>
-          <div className="form-group">
-            <label>Email</label>
+          <input
+            type="email"
+            placeholder="Enter Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="off"
+            required
+          />
 
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+          <input
+            type="password"
+            placeholder="Enter Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="new-password"
+            required
+          />
 
-          <div className="form-group">
-            <label>Password</label>
-
-            <input
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <button type="submit" className="main-button">
+          <button type="submit">
             Login
           </button>
+
         </form>
 
-        <p className="forgot-link">
+        {message && <p>{message}</p>}
+
+        <p>
           <Link to="/forgot-password">
             Forgot Password?
           </Link>
         </p>
 
-        <p className="form-footer">
+        <button
+          onClick={googleLogin}
+          className="google-btn"
+        >
+          Continue with Google
+        </button>
+
+        <p>
           Don't have an account?{" "}
-          <Link to="/signup">Create Account</Link>
+          <Link to="/signup">
+            Signup
+          </Link>
         </p>
+
       </div>
     </div>
   );

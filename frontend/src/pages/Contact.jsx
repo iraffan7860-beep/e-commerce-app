@@ -1,4 +1,45 @@
+import { useState } from "react";
+
 const Contact = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const sendMessage = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/contact",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            message
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message);
+        return;
+      }
+
+      alert("Thank you! Your message has been received.");
+
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch (error) {
+      console.log(error);
+      alert("Failed to send message");
+    }
+  };
+
   return (
     <div className="contact-page">
 
@@ -17,17 +58,11 @@ const Contact = () => {
         <div className="contact-info">
           <h2>Let's Talk</h2>
 
-          <p>
-            📧 Email: minishop@gmail.com
-          </p>
+          <p>📧 Email: minishop@gmail.com</p>
 
-          <p>
-            📞 Phone: +91 98765 43210
-          </p>
+          <p>📞 Phone: +91 98765 43210</p>
 
-          <p>
-            📍 Location: Hyderabad, India
-          </p>
+          <p>📍 Location: Hyderabad, India</p>
         </div>
 
         <div className="contact-form">
@@ -35,23 +70,27 @@ const Contact = () => {
           <input
             type="text"
             placeholder="Your Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
 
           <input
             type="email"
             placeholder="Your Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <textarea
             placeholder="Your Message"
             rows="5"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
           ></textarea>
 
           <button
             className="main-button"
-            onClick={() =>
-              alert("Thank you! Your message has been received.")
-            }
+            onClick={sendMessage}
           >
             Send Message
           </button>
