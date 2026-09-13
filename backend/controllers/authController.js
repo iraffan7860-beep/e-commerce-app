@@ -193,8 +193,8 @@ export const googleLogin = async (req, res) => {
     });
 
     res.redirect(
-      `http://localhost:5173/login#token=${accessToken}`
-    );
+  `https://e-commerce-app-1-j7y9.onrender.com/login#token=${accessToken}`
+);
 
   } catch (error) {
     console.log("Google Login error:", error);
