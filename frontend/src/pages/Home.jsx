@@ -36,9 +36,15 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
+   useEffect(() => {
+  const timer = setTimeout(() => {
     getProducts();
-  }, [search, category]);
+  }, 500);
+
+  return () => {
+    clearTimeout(timer);
+  };
+}, [search, category]);
 
   return (
     <div className="home-page">

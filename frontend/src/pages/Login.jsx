@@ -24,7 +24,7 @@ if (googleToken) {
 
     try {
       const response = await fetch(
-        "https://e-commerce-app-v9zz.onrender.com//api/auth/login",
+        "https://e-commerce-app-v9zz.onrender.com/api/auth/login",
         {
           method: "POST",
           headers: {
