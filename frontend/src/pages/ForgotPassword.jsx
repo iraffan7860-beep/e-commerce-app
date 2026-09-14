@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -6,6 +7,11 @@ const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!email || !newPassword) {
+      alert("Please fill all fields");
+      return;
+    }
 
     try {
       const response = await fetch(
@@ -24,12 +30,15 @@ const ForgotPassword = () => {
 
       const data = await response.json();
 
-      alert(data.message);
-
-      if (response.ok) {
-        setEmail("");
-        setNewPassword("");
+      if (!response.ok) {
+        alert(data.message);
+        return;
       }
+
+      alert("Password changed successfully!");
+
+      setEmail("");
+      setNewPassword("");
     } catch (error) {
       console.log(error);
       alert("Something went wrong");
@@ -38,12 +47,17 @@ const ForgotPassword = () => {
 
   return (
     <div className="auth-page">
-      <div className="auth-box">
-        <h1>Forgot Password</h1>
 
-        <p>Enter your email and create a new password.</p>
+      <div className="auth-box">
+
+        <h1>Reset Password</h1>
+
+        <p>
+          Enter your registered email and create a new password.
+        </p>
 
         <form onSubmit={handleSubmit}>
+
           <input
             type="email"
             placeholder="Enter your email"
@@ -58,11 +72,21 @@ const ForgotPassword = () => {
             onChange={(e) => setNewPassword(e.target.value)}
           />
 
-          <button type="submit" className="main-button">
-            Change Password
+          <button
+            type="submit"
+            className="main-button"
+          >
+            Reset Password
           </button>
+
         </form>
+
+        <Link to="/login" className="auth-link">
+          Back to Login
+        </Link>
+
       </div>
+
     </div>
   );
 };
