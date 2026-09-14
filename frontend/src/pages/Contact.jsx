@@ -8,7 +8,7 @@ const Contact = () => {
   const sendMessage = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/contact",
+        "https://e-commerce-app-v9zz.onrender.com/api/contact",
         {
           method: "POST",
           headers: {
@@ -59,9 +59,7 @@ const Contact = () => {
           <h2>Let's Talk</h2>
 
           <p>📧 Email: minishop@gmail.com</p>
-
           <p>📞 Phone: +91 98765 43210</p>
-
           <p>📍 Location: Hyderabad, India</p>
         </div>
 

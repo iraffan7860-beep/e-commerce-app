@@ -7,6 +7,29 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]);
+
+  const getCategories = async () => {
+    try {
+      const response = await fetch(
+        "https://e-commerce-app-v9zz.onrender.com/api/products"
+      );
+
+      const data = await response.json();
+
+      const uniqueCategories = [
+        ...new Set(
+          data
+            .map((product) => product.category)
+            .filter(Boolean)
+        ),
+      ];
+
+      setCategories(uniqueCategories);
+    } catch (error) {
+      console.log("Category Error:", error);
+    }
+  };
 
   const getProducts = async () => {
     try {
@@ -30,21 +53,24 @@ const Home = () => {
       const response = await fetch(url);
       const data = await response.json();
 
-      setProducts(data);
+      setProducts(data || []);
     } catch (error) {
-      console.log("Error:", error);
+      console.log("Product Error:", error);
+      setProducts([]);
     }
   };
 
-   useEffect(() => {
-  const timer = setTimeout(() => {
-    getProducts();
-  }, 500);
+  useEffect(() => {
+    getCategories();
 
-  return () => {
-    clearTimeout(timer);
-  };
-}, [search, category]);
+    const timer = setTimeout(() => {
+      getProducts();
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [search, category]);
 
   return (
     <div className="home-page">
@@ -52,8 +78,6 @@ const Home = () => {
       {/* ---------- Hero ---------- */}
 
       <section className="hero">
-
-        {/* Hero Content */}
 
         <div className="hero-content">
 
@@ -79,7 +103,10 @@ const Home = () => {
 
           <div className="hero-buttons">
 
-            <a href="#products" className="hero-button">
+            <a
+              href="#products"
+              className="hero-button"
+            >
               Shop Now →
             </a>
 
@@ -107,14 +134,16 @@ const Home = () => {
 
           </div>
 
-
         </div>
 
       </section>
 
       {/* ---------- Products ---------- */}
 
-      <section className="shop-section" id="products">
+      <section
+        className="shop-section"
+        id="products"
+      >
 
         <div className="section-heading">
 
@@ -128,48 +157,46 @@ const Home = () => {
 
           </div>
 
+          {/* ---------- Filters ---------- */}
+
           <div className="filters">
 
             <input
               type="text"
               placeholder="Search products..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
             />
 
             <select
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) =>
+                setCategory(e.target.value)
+              }
             >
+
               <option value="">
                 All Categories
               </option>
 
-              <option value="Electronics">
-                Electronics
-              </option>
-
-              <option value="Clothing">
-                Clothing
-              </option>
-
-              <option value="Shoes">
-                Shoes
-              </option>
-
-              <option value="Beauty">
-                Beauty
-              </option>
-
-              <option value="Home">
-                Home
-              </option>
+              {categories.map((cat) => (
+                <option
+                  key={cat}
+                  value={cat}
+                >
+                  {cat}
+                </option>
+              ))}
 
             </select>
 
           </div>
 
         </div>
+
+        {/* ---------- Products ---------- */}
 
         {products.length === 0 ? (
 

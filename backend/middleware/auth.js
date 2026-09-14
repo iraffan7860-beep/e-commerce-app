@@ -3,13 +3,17 @@ import User from "../models/User.js";
 
 const auth = async (req, res, next) => {
   try {
-    const token = req.headers.authorization;
+    const authHeader = req.headers.authorization;
 
-    if (!token) {
+    if (!authHeader) {
       return res.status(401).json({
         message: "Please login first"
       });
     }
+
+    const token = authHeader.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : authHeader;
 
     const decoded = jwt.verify(
       token,
@@ -28,6 +32,8 @@ const auth = async (req, res, next) => {
 
     next();
   } catch (error) {
+    console.log("Auth Error:", error.message);
+
     return res.status(401).json({
       message: "Invalid or expired access token"
     });
